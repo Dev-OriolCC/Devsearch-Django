@@ -1,11 +1,8 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1>Projects Template</h1>
+<h1>{{ project.title }}</h1>
 <p>
-    <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi consectetur culpa cupiditate deserunt
-    dignissimos dolore, dolorum eligendi exercitationem explicabo facilis fuga ipsam ipsum itaque magnam minus nobis
-    quisquam sit tempore!
-    </span>
+    <span>{{ project.description }}</span>
 </p>
 {% endblock %}
