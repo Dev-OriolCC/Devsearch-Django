@@ -1,38 +1,24 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
-projectsList = [
-    {
-        'id': '1',
-        'title': 'Blog',
-        'description': 'Fully functional blog website.'
-    },
-    {
-        'id': '2',
-        'title': 'Covid-19 Tracker',
-        'description': 'Functional website to track covid-19 cases.'
-    },
-    {
-        'id': '3',
-        'title': 'Anonymous Forum',
-        'description': 'Small forum site.'
-    }
-]
+from .models import Project
+from .forms import ProjectForm
 
 # Create your views here.
 def projects(request):
-    _message = 'Welcome back user!'
-    content = { 'message': _message, 'projects': projectsList }
+    projects = Project.objects.all()
+    content = { 'projects': projects }
     return render(request, 'projects/projects.html', content)
 
-def project(request, id):
-    projectObj = None
-    for i in projectsList:
-        if i['id'] == id:
-            projectObj = i
-    return render(request, 'projects/project.html', { 'project': projectObj })
+def project(request, pk):
+    projectObj = Project.objects.get(id=pk)
+    content = { 'project': projectObj}
+    return render(request, 'projects/project.html', content)
 
-
+def project_create(request):
+    # Need to create project 
+    form = ProjectForm
+    content = { 'form': form }
+    return render(request, 'projects/project_form.html', content)
 
 
 

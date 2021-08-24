@@ -2,11 +2,22 @@
 
 {% block content %}
     <h2>Here goes the list of projects</h2>
-
-    <ul>
+    <a href="{% url 'project_create' %}">Create new project</a>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Project</th>
+            <th>Positive Votes</th>
+            <th>Votes Ratio</th>
+        </tr>
         {% for project in projects %}
-            <li>Title: <a href="{% url 'project' project.id %}">{{ project.title }}</a> -- {{ project.description }}</li>
+            <tr>
+                <td>{{ project.id }}</td>
+                <td><a href="{% url 'project' project.id %}">{{ project.title }}</a></td>
+                <td>{{ project.vote_total }}</td>
+                <td>{{ project.vote_ratio }}%</td>
+            </tr>
         {% endfor %}
-    </ul>
+    </table>
 
 {% endblock %}
