@@ -5,17 +5,19 @@
     <a href="{% url 'project_create' %}">Create new project</a>
     <table>
         <tr>
-            <th>ID</th>
             <th>Project</th>
             <th>Positive Votes</th>
             <th>Votes Ratio</th>
+            <th></th>
+            <th></th>
         </tr>
         {% for project in projects %}
             <tr>
-                <td>{{ project.id }}</td>
                 <td><a href="{% url 'project' project.id %}">{{ project.title }}</a></td>
                 <td>{{ project.vote_total }}</td>
                 <td>{{ project.vote_ratio }}%</td>
+                <td><a href="{% url 'project_delete' project.id %}">Delete</a></td>
+                <td><a href="{% url 'project_update' project.id %}">Edit</a></td>
             </tr>
         {% endfor %}
     </table>
