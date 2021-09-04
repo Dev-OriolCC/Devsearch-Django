@@ -1,6 +1,6 @@
 from django.forms import ModelForm, widgets
 from .models import Project
-from django import  forms
+from django import forms
 
 # Create a form HTML based on a Model
 class ProjectForm(ModelForm):
