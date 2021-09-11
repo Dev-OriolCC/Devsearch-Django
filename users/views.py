@@ -1,5 +1,7 @@
+import os
+
 from django.shortcuts import render, redirect
-from .models import Profile, Skill
+from .models import Profile, Skill, Message
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -12,9 +14,9 @@ from .utilities import searchProfiles, paginateProfiles
 # Create your views here.
 def profiles(request):
     profiles, search_query = searchProfiles(request)
-    custom_range, profiles = paginateProfiles(request, profiles, 1)
+    custom_range, profiles = paginateProfiles(request, profiles, 6)
 
-    content = {'profiles': profiles, 'search_query': search_query, 'custom_range':custom_range }
+    content = {'profiles': profiles, 'search_query': search_query, 'custom_range': custom_range}
     return render(request, 'users/profiles.html', content)
 
 
@@ -33,7 +35,7 @@ def loginPage(request):
         return redirect('profiles')
 
     if request.method == 'POST':
-        username = request.POST['username']
+        username = request.POST['username'].lower()
         password = request.POST['password']
         # Check if username exists in db.
         try:
@@ -45,7 +47,7 @@ def loginPage(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('profiles')
+            return redirect(request.GET['next'] if 'next' in request.GET else 'profiles')
         else:
             messages.error(request, 'Credentials are wrong')
     content = {'page': page}
@@ -91,8 +93,16 @@ def editAccount(request):
     profile = request.user.profile
     form = ProfileForm(instance=profile)
     if request.method == 'POST':
+        if request.FILES:
+            file = 'C:/Users/cesar/PycharmProjects/devsearch/static/images/' + profile.profile_image.name
+            os.remove(file)
+
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
+            # if request.FILES:
+            #     file = 'C:/Users/cesar/PycharmProjects/devsearch/static/images/profiles/'+profile.profile_image.name
+            #     os.remove(file)
+            #     form.save()
             form.save()
             return redirect('account')
 
@@ -140,3 +150,12 @@ def skill_delete(request, pk):
 
     content = {'object': skill}
     return render(request, 'delete_template.html', content)
+
+
+@login_required(login_url='login')
+def inbox(request):
+    profile = request.user.profile
+    messagesProfile = profile.messages.all()
+    messagesUnread = messagesProfile.filter(is_read=False).count()
+    content = {'messagesProfile': messagesProfile, 'messagesUnread': messagesUnread}
+    return render(request, 'users/inbox.html', content)

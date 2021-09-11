@@ -1,10 +1,12 @@
 from django.db import models
 import uuid
 from users.models import Profile
+
+
 # Create your models here.
 # Projects
 class Project(models.Model):
-    #New field - owner
+    # New field - owner
     owner = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
@@ -23,8 +25,25 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
+    @property
+    def reviewers(self):
+        queryset = self.review_set.all().values_list('owner__id', flat=True)
+        return queryset
+
+    @property
+    def calculateVotes(self):
+        reviews = self.review_set.all()
+        upVotes = reviews.filter(value='up').count()
+        totalVotes = reviews.count()
+
+        voteRatio = (upVotes / totalVotes) * 100
+        self.vote_total = totalVotes
+        self.vote_ratio = voteRatio
+        self.save()
+
     class Meta:
-        ordering = ['created']
+        ordering = ['-vote_ratio', '-vote_total', 'title']
+
 
 # Reviews
 class Review(models.Model):
@@ -32,15 +51,21 @@ class Review(models.Model):
         ('up', 'Up Vote'),
         ('down', 'Down Vote'),
     )
-    # owner
+    # New Field
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     body = models.TextField(null=True, blank=True)
     value = models.CharField(max_length=200, choices=VOTE_TYPE)
     created = models.DateTimeField(auto_now_add=True)
     id = models.UUIDField(default=uuid.uuid4, unique=True, primary_key=True, editable=False)
 
+    class Meta:
+        unique_together = [['owner', 'project']]
+
     def __str__(self):
         return self.value
+
+
 # Tags
 class Tag(models.Model):
     name = models.CharField(max_length=200)
