@@ -10,7 +10,6 @@ from .forms import CustomUserCreationForm, ProfileForm, SkillForm, MessageForm
 from django.contrib.auth.decorators import login_required
 from .utilities import searchProfiles, paginateProfiles
 
-
 # Create your views here.
 def profiles(request):
     profiles, search_query = searchProfiles(request)

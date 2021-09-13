@@ -7,21 +7,25 @@
     <div class="content-box">
       <h3 class="inbox__title">New Messages(<span>{{ messagesUnread }}</span>)</h3>
       <ul class="messages">
+        {% if messagesProfile.count > 0 %}
+            {% for message in messagesProfile %}
+                {% if message.is_read == False %}
+                    <li class="message message--unread">
+                    {% else %}
+                    <li class="message">
+                {% endif %}
 
-        {% for message in messagesProfile %}
-            {% if message.is_read == False %}
-                <li class="message message--unread">
-                {% else %}
-                <li class="message">
-            {% endif %}
+                  <a href="{% url 'message' message.id %}">
+                    <span class="message__author">{{ message.name }}</span>
+                    <span class="message__subject">{{ message.subject }}</span>
+                    <span class="message__date">{{ message.created }}</span>
+                  </a>
+                </li>
+            {% endfor %}
 
-              <a href="{% url 'message' message.id %}">
-                <span class="message__author">{{ message.name }}</span>
-                <span class="message__subject">{{ message.subject }}</span>
-                <span class="message__date">{{ message.created }}</span>
-              </a>
-            </li>
-        {% endfor %}
+        {% else %}
+            <p>Noo messages found! 👻</p>
+        {% endif %}
 
       </ul>
     </div>
