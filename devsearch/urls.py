@@ -20,6 +20,9 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    # API TEST
+    path('api/', include('api.urls')),
+    #
     path('admin/', admin.site.urls),
     path('projects/', include('projects.urls')), #Conect this with the other urls file in PROJECTS#
     path('', include('users.urls')), #Conect this with the other urls file in USERS#
