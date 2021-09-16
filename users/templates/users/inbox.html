@@ -16,7 +16,11 @@
                 {% endif %}
 
                   <a href="{% url 'message' message.id %}">
-                    <span class="message__author">{{ message.name }}</span>
+                    {% if message.sender.name %}
+                        <span class="message__author">{{ message.sender.name }}</span>
+                        {% else %}
+                        <span class="message__author">{{ message.name }}</span>
+                    {% endif %}
                     <span class="message__subject">{{ message.subject }}</span>
                     <span class="message__date">{{ message.created }}</span>
                   </a>

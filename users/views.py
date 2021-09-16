@@ -93,8 +93,9 @@ def editAccount(request):
     form = ProfileForm(instance=profile)
     if request.method == 'POST':
         if request.FILES:
-            file = 'C:/Users/cesar/PycharmProjects/devsearch/static/images/' + profile.profile_image.name
-            os.remove(file)
+            if profile.profile_image.name != 'profiles/default-profile.jpg':
+                file = 'C:/Users/cesar/PycharmProjects/devsearch/static/images/' + profile.profile_image.name
+                os.remove(file)
 
         form = ProfileForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():

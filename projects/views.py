@@ -60,13 +60,19 @@ def project_update(request, pk):
     project = profile.project_set.get(id=pk)
     form = ProjectForm(instance=project)
     if request.method == 'POST':
+        newTags = request.POST.get('newTags').replace(',', ' ').split()
         # Delete previous image if exits
         if request.FILES:
             os.remove(project.featured_image.path)
 
         form = ProjectForm(request.POST, request.FILES, instance=project)
         if form.is_valid():
-            form.save()
+            project = form.save()
+            # Not duplicate a existing Tag
+            for tag in newTags:
+                tag, created = Tag.objects.get_or_create(name=tag)
+                project.tags.add()
+
             return redirect('projects')
     content = {'form': form}
     return render(request, 'projects/project_form.html', content)

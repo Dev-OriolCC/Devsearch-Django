@@ -7,11 +7,13 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 
-
 # @receiver(post_delete, sender=User)
 def deleteUser(sender, instance, **kwargs):
-    user = instance.user
-    user.delete()
+    try:
+        user = instance.user
+        user.delete()
+    except:
+        pass
 
 
 # @receiver(post_save, sender=Profile)

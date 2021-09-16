@@ -38,8 +38,8 @@ def projectVote(request, pk):
     data = request.data
 
     review, created = Review.objects.get_or_create(
-        owner = user,
-        project = project
+        owner=user,
+        project=project
     )
     review.value = data['value']
     review.save()
