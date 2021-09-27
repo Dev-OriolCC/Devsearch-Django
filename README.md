@@ -22,11 +22,14 @@ I created a API with Django-REST framework.🙂😀
 ### Author 
 [@Dev-OriolCC](https://github.com/Dev-OriolCC)
 
-## Screenshots and gifs 📸
-![]()
+## Screenshots 📸
 
-
-![]()
+![](screenshots/sc_1.png)
+![](screenshots/sc_2.png)
+![](screenshots/sc_3.png)
+![](screenshots/sc_4.png)
+![](screenshots/sc_5.png)
+![](screenshots/sc_6.png)
 
 
 ### Login
